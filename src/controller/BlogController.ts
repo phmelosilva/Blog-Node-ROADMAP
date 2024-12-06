@@ -6,11 +6,11 @@ let blogs: Blog[] = [];
 // Método POST /posts
 const post = (req: Request, res: Response) => {
     try {
-        const { title, content, category, tags, author } = req.body;
+        const { title, content, category, tags } = req.body;
 
         // Validação simples dos campos obrigatórios
-        if (!title || !content || !author) {
-            return res.status(400).json({ error: "Campos requisitados não estão preenchidos: title, content, ou author" });
+        if (!title || !content) {
+            return res.status(400).json({ error: "Campos requisitados não estão preenchidos: title ou content" });
         }
 
         const newPost: Blog = {
@@ -19,7 +19,6 @@ const post = (req: Request, res: Response) => {
             content,
             category: category || "Sem Categoria",
             tags: tags || [],
-            author,
             createdAt: new Date(),
         };
 
@@ -41,20 +40,13 @@ const getAll = (req: Request, res: Response) => {
 // Método GET /posts/:id
 const getById = (req: Request, res: Response) => {
     const id = req.params.id;
-
-    for (let i = 0; i < blogs.length; i++) {
-        if (blogs[i].id = id) {
-            const post = blogs[i];
-        }
-    }
-
-    const blog = post;
+    const blog = blogs.find((b) => b.id === id);
 
     if (!blog) {
-        return res.status(400).json({ error: "Blog not found" });
-    } else {
-        return res.status(200).json(blog);
+        return res.status(404).json({ error: "Post not found" });
     }
+    
+    res.status(200).json(blog);
 }
 
 // PUT /posts/:id
@@ -74,7 +66,6 @@ const update = (req: Request, res: Response) => {
         content: content || blogs[index].content,
         category: category || blogs[index].category,
         tags: tags || blogs[index].tags,
-        author: author || blogs[index].author,
         updatedAt: new Date(),
     };
 

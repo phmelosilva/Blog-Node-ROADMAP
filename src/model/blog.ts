@@ -4,7 +4,6 @@ type Blog = {
   content: string; 
   category: string; 
   tags: string[]; 
-  author: string; 
   createdAt: Date; 
   updatedAt?: Date; 
 };
